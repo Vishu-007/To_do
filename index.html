@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script type="module">
+  // Import Firebase modules
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBYmzko-XeRYkcQ99D6XcB8_CCCVzCkz4s",
+  authDomain: "to-do-app-3b662.firebaseapp.com",
+  projectId: "to-do-app-3b662",
+  storageBucket: "to-do-app-3b662.firebasestorage.app",
+  messagingSenderId: "812585131043",
+  appId: "1:812585131043:web:e7354beabaef9c3bf82596"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+  // Initialize Firebase + Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Expose db so index.js can use it
+  window.db = db;
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My To-Do List</title>
