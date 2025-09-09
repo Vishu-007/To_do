@@ -13,6 +13,7 @@ const tasksRef = collection(db, "tasks");
 
 // Load tasks in real-time
 onSnapshot(tasksRef, (snapshot) => {
+  console.log("🔄 Tasks updated:", snapshot.docs.length);
   const taskList = document.getElementById("taskList");
   taskList.innerHTML = "";
 
@@ -36,7 +37,11 @@ onSnapshot(tasksRef, (snapshot) => {
     editBtn.onclick = async function () {
       let newTask = prompt("Edit your task:", span.textContent);
       if (newTask !== null && newTask.trim() !== "") {
-        await updateDoc(doc(db, "tasks", taskId), { text: newTask.trim() });
+        try {
+          await updateDoc(doc(db, "tasks", taskId), { text: newTask.trim() });
+        } catch (err) {
+          console.error("❌ Error updating task:", err);
+        }
       }
     };
 
@@ -44,14 +49,22 @@ onSnapshot(tasksRef, (snapshot) => {
     let doneBtn = document.createElement("button");
     doneBtn.textContent = "Done";
     doneBtn.onclick = async function () {
-      await updateDoc(doc(db, "tasks", taskId), { done: !task.done });
+      try {
+        await updateDoc(doc(db, "tasks", taskId), { done: !task.done });
+      } catch (err) {
+        console.error("❌ Error marking task done:", err);
+      }
     };
 
     // Delete Button
     let deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
     deleteBtn.onclick = async function () {
-      await deleteDoc(doc(db, "tasks", taskId));
+      try {
+        await deleteDoc(doc(db, "tasks", taskId));
+      } catch (err) {
+        console.error("❌ Error deleting task:", err);
+      }
     };
 
     buttonDiv.appendChild(editBtn);
@@ -75,7 +88,13 @@ async function addTask() {
     return;
   }
 
-  await addDoc(tasksRef, { text: taskText, done: false });
+  try {
+    await addDoc(tasksRef, { text: taskText, done: false });
+    console.log("✅ Task added:", taskText);
+  } catch (err) {
+    console.error("❌ Error adding task:", err);
+    alert("Could not add task. Check console for details.");
+  }
 
   input.value = "";
 }
